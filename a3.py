@@ -4,6 +4,38 @@
 
 # a3.py
 import code
+from sqlalchemy import create_engine
+from sqlalchemy.engine import URL
+from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime
+
+# engine for Postgres
+url = URL.create(
+    drivername="postgresql",
+    username="calmclelland",
+    host="/tmp/postgresql/socket",
+    database="student"
+)
+
+engine = create_engine(url)
+
+class Base(DeclarativeBase):
+    pass
+
+class Student(Base):
+    __tablename__ = "students"
+    student_id = Column(Integer(), primary_key=True)
+    first_name: Column(String(100), nullable=False)
+    last_name: Column(String(100), nullable=False)
+    email: Column(String(100), nullable=False)
+    dob: Column(DateTime(), default=datetime.now)
+
+Base.metadata.create_all(engine)
+
+Session = sessionmaker(bind=engine)
+session = Session()
 
 ## define banner and exit messages
 bannerMsg = "COMP3005 A3!"
