@@ -4,6 +4,8 @@
 
 # a3.py
 import code
+from psycopg import connect
+from psycopg import sql
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy import Column, Integer, String, DateTime, Text, text
@@ -15,10 +17,11 @@ debug = True
 
 # engine for Postgres
 url = URL.create(
-    drivername="postgresql",
+    drivername="postgresql+psycopg",
     username="calmclelland",
     password="password123",
     host="localhost",
+    port=5432,
     database="student",
 )
 
