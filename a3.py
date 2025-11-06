@@ -4,6 +4,7 @@
 
 # a3.py
 import code
+import re
 from sqlalchemy import create_engine
 from sqlalchemy.engine import URL
 from sqlalchemy import Column, Integer, String, DateTime, Text, text
@@ -11,7 +12,7 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
 
-debug = True
+debug = False
 
 # engine for Postgres
 url = URL.create(
@@ -57,31 +58,140 @@ helpMsg = (
     "   exit                                                    "
     "exit the program\n"
 )
+emailRegex = r"[^@]+@[^@]+\.[^@]+"
+
+
+def createInitialRecords():
+    john = Student(
+        first_name="John",
+        last_name="Doe",
+        email="john.doe@example.com",
+        dob="2023-09-01",
+    )
+    jane = Student(
+        first_name="Jane",
+        last_name="Smith",
+        email="jane.smith@example.com",
+        dob="2023-09-01",
+    )
+    jim = Student(
+        first_name="Jim",
+        last_name="Beam",
+        email="jim.beam@example.com",
+        dob="2023-09-02",
+    )
+
+    students = session.query(Student).all()
+
+    if students == []:
+        session.add_all([john, jane, jim])
+        session.commit()
+
+
+# insert initial records
+createInitialRecords()
+
+
+# helper functions
+def printStudent(student):
+    print(
+        "[Id: "
+        + str(student.student_id)
+        + ", First Name: "
+        + student.first_name
+        + ", Last Name: "
+        + student.last_name
+        + ", Email: "
+        + student.email
+        + ", DOB: "
+        + str(student.dob)
+        + "]"
+    )
 
 
 def listStudents():
     print("listing all students...")
-    # reteive and list all student records
+    allStudents = session.query(Student).all()
+    for student in allStudents:
+        printStudent(student)
 
 
 def addStudent(args):
     print("adding new student...")
     # check for valid arguments
-    # check if student already exists
+    if len(args) != 4:
+        print("incorrect number of arguments!")
+        print("arguments should be:")
+        print("<first_name> <last_name> <email> <dob>")
+        return
+
+    # check for valid email
+    if not re.match(emailRegex, args[2]):
+        print("not a valid email.\nstudent record not added")
+        return
+
+    # check for valid date
+    try:
+        dateCheck = datetime.strptime(args[3], "%Y-%m-%d")
+    except ValueError:
+        print("invalid Dob.\ndate format is YYYY-mm-dd\nstudent record not added.")
+        return
+
+    # check if student already exists?
+    newStudent = Student(
+        first_name=args[0], last_name=args[1], email=args[2], dob=args[3]
+    )
+    session.add(newStudent)
+    session.commit()
 
 
 def updateStudentEmail(args):
     print("updating student email...")
     # check for valid arguments
+    if len(args) != 2:
+        print("incorrect number of arguments!")
+        print("arguments should be:")
+        print("<student_id> <email>")
+        return
+
+    # check for valid email
+    if not re.match(emailRegex, args[1]):
+        print("not a valid email.\nstudent record not updated")
+        return
+
     # check if student exists
+    allStudents = session.query(Student)
+    currentStudent = allStudents.filter(Student.student_id == args[0]).first()
+
+    if currentStudent is None:
+        print("no student found with the specified student_id.")
+        return
+
     # update the students email
+    currentStudent.email = args[1]
 
 
 def deleteStudent(args):
-    print("updating student email")
+    print("deleting student...")
     # check for valid arguments
+    if len(args) != 1:
+        print("incorrect number of arguments!")
+        print("arguments should be:")
+        print("<student_id>")
+        return
     # check if student exists
+    allStudents = session.query(Student)
+    currentStudent = allStudents.filter(Student.student_id == args[0]).first()
+
+    if currentStudent is None:
+        print("no student found with the specified student_id.")
+        return
+
+    printStudent(currentStudent)
+
     # delete student
+    session.delete(currentStudent)
+    session.commit()
 
 
 # create a read-eval-print loop
