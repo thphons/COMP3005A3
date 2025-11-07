@@ -1,5 +1,6 @@
 ##  Cal McLelland
 #   Assignment 3
+#   Question 1
 ##  COMP 3005 Fall 2025
 
 # a3.py
@@ -51,8 +52,10 @@ helpMsg = (
     "list all commands\n"
     "   listStudents                                            "
     "list all student records\n"
-    "   addStudents <first_name> <last_name> <email> <dob>      "
+    "   addStudent <first_name> <last_name> <email> <dob>       "
     "add a new student record with the specified values\n"
+    "   updateStudentEmail <student_id> <new_email>             "
+    "find the student with the specified id and update their email address\n"
     "   deleteStudent <student_id>                              "
     "delete the student record with the specified id\n"
     "   exit                                                    "
@@ -137,7 +140,7 @@ def addStudent(args):
         print("invalid Dob.\ndate format is YYYY-mm-dd\nstudent record not added.")
         return
 
-    # check if student already exists?
+    # create the new student object and add it
     newStudent = Student(
         first_name=args[0], last_name=args[1], email=args[2], dob=args[3]
     )
@@ -179,6 +182,7 @@ def deleteStudent(args):
         print("arguments should be:")
         print("<student_id>")
         return
+
     # check if student exists
     allStudents = session.query(Student)
     currentStudent = allStudents.filter(Student.student_id == args[0]).first()
