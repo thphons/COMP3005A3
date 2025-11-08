@@ -2,8 +2,8 @@
 #   Assignment 3
 #   Question 1
 ##  COMP 3005 Fall 2025
+#   a3.py
 
-# a3.py
 import code
 import re
 from sqlalchemy import create_engine
@@ -28,7 +28,7 @@ engine = create_engine(url)
 
 Base = declarative_base()
 
-
+#table definition
 class Student(Base):
     __tablename__ = "students"
     student_id = Column(Integer(), primary_key=True)
@@ -43,7 +43,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-## define banner and exit messages
+## define banner, exit and help messages
 bannerMsg = "COMP3005 A3!"
 exitMsg = "bye!"
 helpMsg = (
@@ -63,7 +63,7 @@ helpMsg = (
 )
 emailRegex = r"[^@]+@[^@]+\.[^@]+"
 
-
+#initial insert statements
 def createInitialRecords():
     john = Student(
         first_name="John",
