@@ -17,7 +17,9 @@ debug = False
 
 # engine for Postgres
 url = URL.create(
-    drivername="postgresql+psycopg",
+    drivername="postgresql+psycopg2",
+    username="calmclelland",
+    password="password123",
     host="localhost",
     port=5432,
     database="student",
