@@ -1,8 +1,9 @@
 ##  Cal McLelland
 #   Assignment 3
+#   Question 1
 ##  COMP 3005 Fall 2025
+#   a3.py
 
-# a3.py
 import code
 import re
 from sqlalchemy import create_engine
@@ -26,7 +27,7 @@ engine = create_engine(url)
 
 Base = declarative_base()
 
-
+#table definition
 class Student(Base):
     __tablename__ = "students"
     student_id = Column(Integer(), primary_key=True)
@@ -41,7 +42,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-## define banner and exit messages
+## define banner, exit and help messages
 bannerMsg = "COMP3005 A3!"
 exitMsg = "bye!"
 helpMsg = (
@@ -50,8 +51,10 @@ helpMsg = (
     "list all commands\n"
     "   listStudents                                            "
     "list all student records\n"
-    "   addStudents <first_name> <last_name> <email> <dob>      "
+    "   addStudent <first_name> <last_name> <email> <dob>       "
     "add a new student record with the specified values\n"
+    "   updateStudentEmail <student_id> <new_email>             "
+    "find the student with the specified id and update their email address\n"
     "   deleteStudent <student_id>                              "
     "delete the student record with the specified id\n"
     "   exit                                                    "
@@ -59,7 +62,7 @@ helpMsg = (
 )
 emailRegex = r"[^@]+@[^@]+\.[^@]+"
 
-
+#initial insert statements
 def createInitialRecords():
     john = Student(
         first_name="John",
@@ -136,7 +139,7 @@ def addStudent(args):
         print("invalid Dob.\ndate format is YYYY-mm-dd\nstudent record not added.")
         return
 
-    # check if student already exists?
+    # create the new student object and add it
     newStudent = Student(
         first_name=args[0], last_name=args[1], email=args[2], dob=args[3]
     )
@@ -178,6 +181,7 @@ def deleteStudent(args):
         print("arguments should be:")
         print("<student_id>")
         return
+
     # check if student exists
     allStudents = session.query(Student)
     currentStudent = allStudents.filter(Student.student_id == args[0]).first()

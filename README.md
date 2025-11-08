@@ -1,5 +1,3 @@
-# COMP3005A3
-
 COMP 3005 Fall 2025
 Cal McLelland
 Assignment 3
@@ -41,3 +39,9 @@ python -m pip install sqlalchemy psycopg[binary] psycopg2-binary
 -------------------------------
 
 In pgAdmin 4 (install instructions) create a new postgres database called "student"
+
+
+Link to Demo Video
+
+https://mediaspace.carleton.ca/media/COMP3005_A3_Q1_Demo/1_5rrgbp61
+
