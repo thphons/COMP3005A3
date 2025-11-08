@@ -3,35 +3,41 @@
 COMP 3005 Fall 2025
 Cal McLelland
 Assignment 3
+Question 1
 
----------------------------------------
--- Installation (Windows PowerShell) --
----------------------------------------
+----------------------------------------------
+-- Installation (Windows PowerShell w/ WSL) --
+----------------------------------------------
+
+---------
+-- WSL --
+---------
+
+wsl --install
 
 ------------
 -- Python --
 ------------
 
-winget install --id Python.Python.3 -e --source winget
+wsl -u <username>
+
+sudo apt update
+sudo apt install -y python3 python3-venv python3-pip build-essential libpq-dev
+
+-- create a virtual enviroment with venv
+
+python3 -m venv .venv
+source .venv/bin/activate
 
 ----------------
 -- SQLAcademy --
 ----------------
 
-py -3 -m pip install sqlalchemy psycopg[binary] psycopg2
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install sqlalchemy psycopg[binary] psycopg2-binary
 
----------------------
--- Create Database --
----------------------
+-------------------------------
+-- Create Database (pgadmin) --
+-------------------------------
 
-winget install --id PostgreSQL.PostgreSQL -e <- TODO: fix this
-
-Start-Service postgresql-x64-17
-
-Get-Service *postgres*
-
-psql -U postgres
-
-CREATE USER calmclelland WITH PASSWORD 'password123';
-CREATE DATABASE student OWNER calmclelland;
-\q
+In pgAdmin 4 (install instructions) create a new postgres database called "student"
