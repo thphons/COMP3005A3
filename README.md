@@ -7,6 +7,16 @@ Question 1
 -- Installation (Windows PowerShell w/ WSL) --
 ----------------------------------------------
 
+--------------
+-- postgres --
+--------------
+
+Download and run installer
+
+https://www.postgresql.org/download/windows/
+
+during installation, select "Command Line Tools" to install psql
+
 ---------
 -- WSL --
 ---------
@@ -38,8 +48,27 @@ python -m pip install sqlalchemy psycopg[binary] psycopg2-binary
 -- Create Database (pgadmin) --
 -------------------------------
 
-In pgAdmin 4 (install instructions) create a new postgres database called "student"
+In PowerShell:
 
+psql
+
+CREATE DATABASE student;
+
+CREATE ROLE calmclelland WITH LOGIN PASSWORD 'password123';
+
+GRANT ALL PRIVILEGES ON DATABASE student TO calmclelland;
+
+---------
+-- Run --
+---------
+
+python a3.py
+
+type "help" to view available commands
+
+----------------
+-- Demo Video --
+----------------
 
 Link to Demo Video
 
